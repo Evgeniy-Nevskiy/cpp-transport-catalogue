@@ -1,14 +1,10 @@
-#include "transport_catalogue.h"
 #include "input_reader.h"
 #include "stat_reader.h"
 
-using namespace std;
-using namespace transport_catalogue;
-using namespace transport_catalogue::detail;
+using namespace transport;
 
-int main()
-{
-    TransportCatalogue catalogue;
-    fill_catalogue(std::cin, catalogue);
-    parse_and_execute_queries(std::cin, catalogue);
+int main() {
+    TransportCatalogue transport_catalogue;
+    Parsing(std::cin, transport_catalogue);
+    ShowRequests(std::cin, transport_catalogue, std::cout);
 }
