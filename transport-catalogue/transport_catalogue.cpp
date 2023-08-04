@@ -1,31 +1,29 @@
 #include "transport_catalogue.h"
 
-
 namespace transport {
 
     void TransportCatalogue::AddStop(std::string_view stop_name, const geo::Coordinates crds) {
-
         bus_stops_.push_back({ std::string(stop_name), crds, {} });
         stopname_to_stop_[bus_stops_.back().stop_name] = &bus_stops_.back();
     }
 
-    void TransportCatalogue::AddBus(std::string_view bus_name, const std::vector<const Stop*> marshrut, bool crug) {
+    void TransportCatalogue::AddBus(std::string_view bus_name, const std::vector<const Stop*>& marshrut, bool crug) {
 
-        Bus temporary_bus; 
+        Bus temp_bus;
 
-        temporary_bus.bus_name = bus_name;
+        temp_bus.bus_name = bus_name;
 
-        temporary_bus.crug = crug;
+        temp_bus.crug = crug;
 
-        temporary_bus.marshrut = marshrut;
+        temp_bus.marshrut = marshrut;
 
         if (!crug)
         {
-            temporary_bus.stops_count = (marshrut.size() * 2) - 1;
+            temp_bus.stops_count = (marshrut.size() * 2) - 1;
         }
         else
         {
-            temporary_bus.stops_count = marshrut.size();
+            temp_bus.stops_count = marshrut.size();
         }
 
         int marshrut_length = 0;
@@ -46,13 +44,13 @@ namespace transport {
             }
         }
 
-       std:: unordered_set <const Stop*> set_of_unique_stops(marshrut.begin(), marshrut.end());
-       temporary_bus.unique_stops_count = set_of_unique_stops.size();
+        std::unordered_set <const Stop*> set_of_unique_stops(marshrut.begin(), marshrut.end());
+        temp_bus.unique_stops_count = set_of_unique_stops.size();
 
-       temporary_bus.marshrut_length = marshrut_length;
-       temporary_bus.curvature = marshrut_length / geo_length;
+        temp_bus.marshrut_length = marshrut_length;
+        temp_bus.curvature = marshrut_length / geo_length;
 
-       buses_.push_back(temporary_bus);
+        buses_.push_back(temp_bus);
 
         busname_to_bus_[buses_.back().bus_name] = &buses_.back();
         for (const auto& route_stop : marshrut) {
@@ -62,17 +60,13 @@ namespace transport {
         }
     }
 
+
     const Bus* TransportCatalogue::SearchBus(std::string_view bus_number) const {
         return busname_to_bus_.count(bus_number) ? busname_to_bus_.at(bus_number) : nullptr;
     }
 
     const Stop* TransportCatalogue::SearchStop(std::string_view stop_name) const {
         return stopname_to_stop_.count(stop_name) ? stopname_to_stop_.at(stop_name) : nullptr;
-    }
-
-
-    const std::set<std::string> TransportCatalogue::GetBusesByStop(std::string_view stop_name) const {
-        return stopname_to_stop_.at(stop_name)->buses_on_this_stop;
     }
 
     void TransportCatalogue::SetDistance(const Stop* from, const Stop* to, const int distance) {
@@ -83,6 +77,14 @@ namespace transport {
         if (stop_distances_.count({ from, to })) return stop_distances_.at({ from, to });
         else if (stop_distances_.count({ to, from })) return stop_distances_.at({ to, from });
         else return 0;
+    }
+
+    const std::map<std::string_view, const Bus*> TransportCatalogue::SortBuses() const {
+        std::map<std::string_view, const Bus*> result;
+        for (const auto& bus : busname_to_bus_) {
+            result.emplace(bus);
+        }
+        return result;
     }
 
 } // namespace transport
