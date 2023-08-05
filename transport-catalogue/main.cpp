@@ -11,6 +11,10 @@ int main() {
     const auto& render_settings = file_json.GetRenderSettings().AsMap();
     const auto& renderer = file_json.FillRenderSettings(render_settings);
 
+
+
+
     RequestHandler rh(transport_catalogue, renderer);
-    file_json.ProcessRequests(stat_requests, rh);
+    //file_json.ProcessRequests(stat_requests, rh);
+    rh.ProcessRequests(stat_requests, rh);
 }
