@@ -17,14 +17,14 @@ public:
     const json::Node& GetStatRequests() const;
     const json::Node& GetRenderSettings() const;
 
-    void ProcessRequests(const json::Node& stat_requests, RequestHandler& rh) const;
+    /*void ProcessRequests(const json::Node& stat_requests, RequestHandler& rh) const;*/
 
     void FillCatalogue(transport::TransportCatalogue& catalogue);
     renderer::MapRenderer FillRenderSettings(const json::Dict& request_map) const;
 
-    const json::Node PrintBus(const json::Dict& request_map, RequestHandler& rh) const;
+    /*const json::Node PrintBus(const json::Dict& request_map, RequestHandler& rh) const;
     const json::Node PrintStop(const json::Dict& request_map, RequestHandler& rh) const;
-    const json::Node PrintMap(const json::Dict& request_map, RequestHandler& rh) const;
+    const json::Node PrintMap(const json::Dict& request_map, RequestHandler& rh) const;*/
 
 private:
     json::Document input_;
