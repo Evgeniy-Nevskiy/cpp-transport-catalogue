@@ -13,6 +13,12 @@ public:
         , renderer_(renderer)
     {
     }
+    ////////////////////////////////////////////////////////
+    void ProcessRequests(const json::Node& stat_requests, RequestHandler& rh) const;
+    const json::Node PrintRoute(const json::Dict& request_map, RequestHandler& rh) const;
+    const json::Node PrintStop(const json::Dict& request_map, RequestHandler& rh) const;
+    const json::Node PrintMap(const json::Dict& request_map, RequestHandler& rh) const;
+    ///////////////////////////////////////////////////////
 
 
     const transport::Bus* GetBus(const std::string_view bus_number) const;
