@@ -2,19 +2,16 @@
 #include "request_handler.h"
 
 int main() {
-    transport::TransportCatalogue transport_catalogue;
-    JsonReader file_json(std::cin);
+    transport::TransportCatalogue catalogue;
+    JsonReader json_doc(std::cin);
 
-    file_json.FillCatalogue(transport_catalogue);
+    json_doc.FillCatalogue(catalogue);
 
-    const auto& stat_requests = file_json.GetStatRequests();
-    const auto& render_settings = file_json.GetRenderSettings().AsMap();
-    const auto& renderer = file_json.FillRenderSettings(render_settings);
+    const auto& stat_requests = json_doc.GetStatRequests();
+    const auto& render_settings = json_doc.GetRenderSettings().AsMap();
+    const auto& renderer = json_doc.FillRenderSettings(render_settings);
 
-
-
-
-    RequestHandler rh(transport_catalogue, renderer);
-    //file_json.ProcessRequests(stat_requests, rh);
-    rh.ProcessRequests(stat_requests, rh);
+    RequestHandler rh(catalogue, renderer);
+    //json_doc.ProcessRequests(stat_requests, rh);
+    rh.ProcessRequests(stat_requests);
 }
