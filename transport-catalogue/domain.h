@@ -22,21 +22,19 @@
 namespace transport {
 
     struct Stop {
-        std::string name;
-        geo::Coordinates coords;
+        std::string stop_name;
+        geo::Coordinates crds;
         std::set<std::string> buses_on_this_stop;
     };
 
     struct Bus {
-        std::string name;
-        std::vector<const Stop*> stops;
-        bool circle;
-    };
+        std::string bus_name;
+        std::vector<const Stop*> marshrut;
+        bool crug;
 
-    struct BusStat {
         size_t stops_count;
         size_t unique_stops_count;
-        double route_length;
+        double marshrut_length;
         double curvature;
     };
 
