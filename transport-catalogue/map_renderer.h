@@ -73,10 +73,10 @@ namespace renderer {
         }
 
         // Проецирует широту и долготу в координаты внутри SVG-изображения
-        svg::Point operator()(geo::Coordinates coords) const {
+        svg::Point operator()(geo::Coordinates crds) const {
             return {
-                (coords.lng - min_lon_) * zoom_coeff_ + padding_,
-                (max_lat_ - coords.lat) * zoom_coeff_ + padding_
+                (crds.lng - min_lon_) * zoom_coeff_ + padding_,
+                (max_lat_ - crds.lat) * zoom_coeff_ + padding_
             };
         }
 
@@ -110,8 +110,8 @@ namespace renderer {
 
         std::vector<svg::Polyline> GetRouteLines(const std::map<std::string_view, const transport::Bus*>& buses, const SphereProjector& sp) const;
         std::vector<svg::Text> GetBusLabel(const std::map<std::string_view, const transport::Bus*>& buses, const SphereProjector& sp) const;
-        std::vector<svg::Circle> GetStopsSymbols(const std::map<std::string_view, const transport::Stop*>& stops, const SphereProjector& sp) const;
-        std::vector<svg::Text> GetStopsLabels(const std::map<std::string_view, const transport::Stop*>& stops, const SphereProjector& sp) const;
+        std::vector<svg::Circle> GetStopsSymbols(const std::map<std::string_view, const transport::Stop*>& marshrut, const SphereProjector& sp) const;
+        std::vector<svg::Text> GetStopsLabels(const std::map<std::string_view, const transport::Stop*>& marshrut, const SphereProjector& sp) const;
 
         svg::Document GetSVG(const std::map<std::string_view, const transport::Bus*>& buses) const;
 
