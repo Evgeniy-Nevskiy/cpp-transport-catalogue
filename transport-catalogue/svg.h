@@ -256,10 +256,9 @@ namespace svg {
         double radius_ = 1.0;
     };
 
-    /*
-        * Класс Polyline моделирует элемент <polyline> для отображения ломаных линий
-        * https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polyline
-        */
+        // Класс Polyline моделирует элемент <polyline> для отображения ломаных линий
+        // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polyline
+
     class Polyline final : public Object, public PathProps<Polyline> {
     public:
         // Добавляет очередную вершину к ломаной линии
