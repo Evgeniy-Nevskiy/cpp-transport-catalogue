@@ -26,19 +26,25 @@ namespace transport {
             }
         };
 
-        void AddStop(std::string_view stop_name, const geo::Coordinates coordinates);
-        void AddBus(std::string_view bus_number, const std::vector<const Stop*>& marshrut, bool is_circle);
+        std::optional<BusStat> GetBusStat(const std::string_view& bus_number) const;
 
-        const Bus* SearchBus(std::string_view bus_number) const;
-        const Stop* SearchStop(std::string_view stop_name) const;
+
+
+        void AddStop(std::string_view stop_name, const geo::Coordinates coords);
+        void AddBus(std::string_view bus_number, const std::vector<const Stop*> stops, bool circle);
+
+        const Bus* FindBus(std::string_view bus_number) const;
+        const Stop* FindStop(std::string_view stop_name) const;
+
+        const std::map<std::string_view, const Bus*> GetSortedAllBuses() const;
+
+        size_t UniqueStopsCount(std::string_view bus_number) const;
 
         void SetDistance(const Stop* from, const Stop* to, const int distance);
         int GetDistance(const Stop* from, const Stop* to) const;
 
-        const std::map<std::string_view, const Bus*> SortBuses() const;
-
     private:
-        std::deque<Stop> bus_stops_;
+        std::deque<Stop> stops_;
         std::deque<Bus> buses_;
 
         std::unordered_map<std::string_view, const Stop*> stopname_to_stop_;
