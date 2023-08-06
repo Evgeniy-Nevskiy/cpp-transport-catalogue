@@ -21,7 +21,7 @@ namespace json {
 
         if (top_node->IsDict()) {
             if (!key_) throw std::logic_error("Could not Value() for dict without key");
-            auto& dict = std::get<Dict>(top_node->GetValue());
+            auto& dict = std::get<Map>(top_node->GetValue());
             auto [pos, _] = dict.emplace(std::move(key_.value()), Node{});
             key_ = std::nullopt;
             top_node = &pos->second;
@@ -45,18 +45,18 @@ namespace json {
 
         if (top_node->IsDict()) {
             if (!key_) throw std::logic_error("Could not StartDict() for dict without key");
-            auto& dict = std::get<Dict>(top_node->GetValue());
-            auto [pos, _] = dict.emplace(std::move(key_.value()), Dict());
+            auto& dict = std::get<Map>(top_node->GetValue());
+            auto [pos, _] = dict.emplace(std::move(key_.value()), Map());
             key_ = std::nullopt;
             nodes_stack_.emplace_back(&pos->second);
         }
         else if (top_node->IsArray()) {
             auto& array = std::get<Array>(top_node->GetValue());
-            array.emplace_back(Dict());
+            array.emplace_back(Map());
             nodes_stack_.emplace_back(&array.back());
         }
         else if (top_node->IsNull()) {
-            top_node->GetValue() = Dict();
+            top_node->GetValue() = Map();
         }
         else throw std::logic_error("Wrong prev node");
 
@@ -77,7 +77,7 @@ namespace json {
 
         if (top_node->IsDict()) {
             if (!key_) throw std::logic_error("Could not StartArray() for dict without key");
-            auto& dict = std::get<Dict>(top_node->GetValue());
+            auto& dict = std::get<Map>(top_node->GetValue());
             auto [pos, _] = dict.emplace(std::move(key_.value()), Array());
             key_ = std::nullopt;
             nodes_stack_.emplace_back(&pos->second);
@@ -115,7 +115,7 @@ namespace json {
         if (std::holds_alternative<std::string>(value)) return Node(std::get<std::string>(value));
         if (std::holds_alternative<std::nullptr_t>(value)) return Node(std::get<std::nullptr_t>(value));
         if (std::holds_alternative<bool>(value)) return Node(std::get<bool>(value));
-        if (std::holds_alternative<Dict>(value)) return Node(std::get<Dict>(value));
+        if (std::holds_alternative<Map>(value)) return Node(std::get<Map>(value));
         if (std::holds_alternative<Array>(value)) return Node(std::get<Array>(value));
         return {};
     }
