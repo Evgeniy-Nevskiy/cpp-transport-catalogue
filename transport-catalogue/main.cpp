@@ -2,21 +2,17 @@
 #include "request_handler.h"
 
 int main() {
-#ifdef __APPLE__
-    freopen("input.json", "r", stdin);
-    freopen("output.json", "w", stdout);
-    //freopen("error-output.txt", "w", stderr);
-#endif
 
-    transport::TransportCatalogue tc;
-    JsonReader json_file(std::cin);
+    transport::TransportCatalogue transport_catalogue;
+    JsonReader file_json(std::cin);
 
-    json_file.FillCatalogue(tc);
+    file_json.FillCatalogue(transport_catalogue);
 
-    const auto& stat_requests = json_file.GetStatRequests();
-    const auto& render_settings = json_file.GetRenderSettings().AsDict();
-    const auto& renderer = json_file.FillRenderSettings(render_settings);
+    const auto& stat_requests = file_json.GetStatRequests();
+    const auto& render_settings = file_json.GetRenderSettings().AsDict();
+    const auto& renderer = file_json.FillRenderSettings(render_settings);
 
-    RequestHandler rh(tc, renderer);
-    json_file.ProcessRequests(stat_requests, rh);
+    RequestHandler rh(transport_catalogue, renderer);
+    rh.ProcessRequests(stat_requests);
+   
 }
