@@ -13,10 +13,17 @@ public:
         , renderer_(renderer)
     {
     }
+   
+    void ProcessRequests(const json::Node& stat_requests) const;
+    const json::Node PrintRoute(const json::Map& request_map) const;
+    const json::Node PrintStop(const json::Map& request_map) const;
+    const json::Node PrintMap(const json::Map& request_map) const;
+ 
+    const transport::Bus* GetBus(const std::string_view bus_number) const;
 
-    std::optional<transport::BusStat> GetBusStat(const std::string_view bus_number) const;
     const std::set<std::string> GetBusesByStop(std::string_view stop_name) const;
-    bool IsBusName(const std::string_view bus_number) const;
+
+    bool IsBusNumber(const std::string_view bus_number) const;
     bool IsStopName(const std::string_view stop_name) const;
 
     svg::Document RenderMap() const;
