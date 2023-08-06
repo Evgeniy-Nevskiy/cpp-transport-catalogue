@@ -16,12 +16,12 @@ namespace renderer {
         std::vector<svg::Polyline> result;
         size_t color_num = 0;
         for (const auto& [bus_number, bus] : buses) {
-            if (bus->marshrut.empty()) continue;
-            std::vector<const transport::Stop*> route_stops{ bus->marshrut.begin(), bus->marshrut.end() };
-            if (bus->crug == false) route_stops.insert(route_stops.end(), std::next(bus->marshrut.rbegin()), bus->marshrut.rend());
+            if (bus->stops.empty()) continue;
+            std::vector<const transport::Stop*> route_stops{ bus->stops.begin(), bus->stops.end() };
+            if (bus->circle == false) route_stops.insert(route_stops.end(), std::next(bus->stops.rbegin()), bus->stops.rend());
             svg::Polyline line;
             for (const auto& stop : route_stops) {
-                line.AddPoint(sp(stop->crds));
+                line.AddPoint(sp(stop->coords));
             }
             line.SetStrokeColor(render_settings_.color_palette[color_num]);
             line.SetFillColor("none");
@@ -42,25 +42,25 @@ namespace renderer {
         std::vector<svg::Text> result;
         size_t color_num = 0;
         for (const auto& [bus_number, bus] : buses) {
-            if (bus->marshrut.empty()) continue;
+            if (bus->stops.empty()) continue;
             svg::Text text;
             svg::Text underlayer;
-            text.SetPosition(sp(bus->marshrut[0]->crds));
+            text.SetPosition(sp(bus->stops[0]->coords));
             text.SetOffset(render_settings_.bus_label_offset);
             text.SetFontSize(render_settings_.bus_label_font_size);
             text.SetFontFamily("Verdana");
             text.SetFontWeight("bold");
-            text.SetData(bus->bus_name);
+            text.SetData(bus->name);
             text.SetFillColor(render_settings_.color_palette[color_num]);
             if (color_num < (render_settings_.color_palette.size() - 1)) ++color_num;
             else color_num = 0;
 
-            underlayer.SetPosition(sp(bus->marshrut[0]->crds));
+            underlayer.SetPosition(sp(bus->stops[0]->coords));
             underlayer.SetOffset(render_settings_.bus_label_offset);
             underlayer.SetFontSize(render_settings_.bus_label_font_size);
             underlayer.SetFontFamily("Verdana");
             underlayer.SetFontWeight("bold");
-            underlayer.SetData(bus->bus_name);
+            underlayer.SetData(bus->name);
             underlayer.SetFillColor(render_settings_.underlayer_color);
             underlayer.SetStrokeColor(render_settings_.underlayer_color);
             underlayer.SetStrokeWidth(render_settings_.underlayer_width);
@@ -70,11 +70,11 @@ namespace renderer {
             result.push_back(underlayer);
             result.push_back(text);
 
-            if (bus->crug == false && bus->marshrut[0] != bus->marshrut[bus->marshrut.size() - 1]) {
+            if (bus->circle == false && bus->stops[0] != bus->stops[bus->stops.size() - 1]) {
                 svg::Text text2{ text };
                 svg::Text underlayer2{ underlayer };
-                text2.SetPosition(sp(bus->marshrut[bus->marshrut.size() - 1]->crds));
-                underlayer2.SetPosition(sp(bus->marshrut[bus->marshrut.size() - 1]->crds));
+                text2.SetPosition(sp(bus->stops[bus->stops.size() - 1]->coords));
+                underlayer2.SetPosition(sp(bus->stops[bus->stops.size() - 1]->coords));
 
                 result.push_back(underlayer2);
                 result.push_back(text2);
@@ -84,11 +84,11 @@ namespace renderer {
         return result;
     }
 
-    std::vector<svg::Circle> MapRenderer::GetStopsSymbols(const std::map<std::string_view, const transport::Stop*>& marshrut, const SphereProjector& sp) const {
+    std::vector<svg::Circle> MapRenderer::GetStopsSymbols(const std::map<std::string_view, const transport::Stop*>& stops, const SphereProjector& sp) const {
         std::vector<svg::Circle> result;
-        for (const auto& [stop_name, stop] : marshrut) {
+        for (const auto& [stop_name, stop] : stops) {
             svg::Circle symbol;
-            symbol.SetCenter(sp(stop->crds));
+            symbol.SetCenter(sp(stop->coords));
             symbol.SetRadius(render_settings_.stop_radius);
             symbol.SetFillColor("white");
 
@@ -98,23 +98,23 @@ namespace renderer {
         return result;
     }
 
-    std::vector<svg::Text> MapRenderer::GetStopsLabels(const std::map<std::string_view, const transport::Stop*>& marshrut, const SphereProjector& sp) const {
+    std::vector<svg::Text> MapRenderer::GetStopsLabels(const std::map<std::string_view, const transport::Stop*>& stops, const SphereProjector& sp) const {
         std::vector<svg::Text> result;
         svg::Text text;
         svg::Text underlayer;
-        for (const auto& [stop_name, stop] : marshrut) {
-            text.SetPosition(sp(stop->crds));
+        for (const auto& [stop_name, stop] : stops) {
+            text.SetPosition(sp(stop->coords));
             text.SetOffset(render_settings_.stop_label_offset);
             text.SetFontSize(render_settings_.stop_label_font_size);
             text.SetFontFamily("Verdana");
-            text.SetData(stop->stop_name);
+            text.SetData(stop->name);
             text.SetFillColor("black");
 
-            underlayer.SetPosition(sp(stop->crds));
+            underlayer.SetPosition(sp(stop->coords));
             underlayer.SetOffset(render_settings_.stop_label_offset);
             underlayer.SetFontSize(render_settings_.stop_label_font_size);
             underlayer.SetFontFamily("Verdana");
-            underlayer.SetData(stop->stop_name);
+            underlayer.SetData(stop->name);
             underlayer.SetFillColor(render_settings_.underlayer_color);
             underlayer.SetStrokeColor(render_settings_.underlayer_color);
             underlayer.SetStrokeWidth(render_settings_.underlayer_width);
@@ -134,17 +134,17 @@ namespace renderer {
         std::map<std::string_view, const transport::Stop*> all_stops;
 
         for (const auto& [bus_number, bus] : buses) {
-            if (bus->marshrut.empty()) continue;
-            for (const auto& stop : bus->marshrut) {
-                route_stops_coord.push_back(stop->crds);
-                all_stops[stop->stop_name] = stop;
+            if (bus->stops.empty()) continue;
+            for (const auto& stop : bus->stops) {
+                route_stops_coord.push_back(stop->coords);
+                all_stops[stop->name] = stop;
             }
         }
         SphereProjector sp(route_stops_coord.begin(), route_stops_coord.end(), render_settings_.width, render_settings_.height, render_settings_.padding);
 
         for (const auto& line : GetRouteLines(buses, sp)) result.Add(line);
         for (const auto& text : GetBusLabel(buses, sp)) result.Add(text);
-        for (const auto& crug : GetStopsSymbols(all_stops, sp)) result.Add(crug);
+        for (const auto& circle : GetStopsSymbols(all_stops, sp)) result.Add(circle);
         for (const auto& text : GetStopsLabels(all_stops, sp)) result.Add(text);
 
         return result;
