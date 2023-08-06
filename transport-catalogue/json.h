@@ -9,7 +9,7 @@
 namespace json {
 
     class Node;
-    using Dict = std::map<std::string, Node>;
+    using Map = std::map<std::string, Node>;
     using Array = std::vector<Node>;
 
     class ParsingError : public std::runtime_error {
@@ -18,7 +18,7 @@ namespace json {
     };
 
     class Node final
-        : private std::variant<std::nullptr_t, Array, Dict, bool, int, double, std::string> {
+        : private std::variant<std::nullptr_t, Array, Map, bool, int, double, std::string> {
     public:
         using variant::variant;
         using Value = variant;
@@ -89,15 +89,15 @@ namespace json {
         }
 
         bool IsDict() const {
-            return std::holds_alternative<Dict>(*this);
+            return std::holds_alternative<Map>(*this);
         }
-        const Dict& AsDict() const {
+        const Map& AsDict() const {
             using namespace std::literals;
             if (!IsDict()) {
                 throw std::logic_error("Not a dict"s);
             }
 
-            return std::get<Dict>(*this);
+            return std::get<Map>(*this);
         }
 
         bool operator==(const Node& rhs) const {
