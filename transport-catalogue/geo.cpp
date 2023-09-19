@@ -1,7 +1,7 @@
-#define _USE_MATH_DEFINES
-#include "geo.h"
+#define _USE_MATH_DEFINES 
+#include "geo.h" 
 
-#include <cmath>
+#include <cmath> 
 
 namespace geo {
 
@@ -17,4 +17,4 @@ namespace geo {
             * EARTH_RADIUS;
     }
 
-} // namespace geo
+} // namespace geo 
