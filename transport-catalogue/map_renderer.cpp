@@ -4,7 +4,7 @@
  * Пока можете оставить файл пустым.
  */
 
-#include "map_renderer.h"
+#include "map_renderer.h" 
 
 namespace renderer {
 
@@ -150,4 +150,4 @@ namespace renderer {
         return result;
     }
 
-} // namespace renderer
+} // namespace renderer 

@@ -1,4 +1,4 @@
-#include "svg.h"
+#include "svg.h" 
 
 namespace svg {
 
@@ -47,13 +47,13 @@ namespace svg {
     void Object::Render(const RenderContext& context) const {
         context.RenderIndent();
 
-        // Делегируем вывод тега своим подклассам
+        // Делегируем вывод тега своим подклассам 
         RenderObject(context);
 
         context.out << std::endl;
     }
 
-    // ---------- Circle ------------------
+    // ---------- Circle ------------------ 
 
     Circle& Circle::SetCenter(Point center) {
         center_ = center;
@@ -69,12 +69,12 @@ namespace svg {
         auto& out = context.out;
         out << "<circle cx=\""sv << center_.x << "\" cy=\""sv << center_.y << "\" "sv;
         out << "r=\""sv << radius_ << "\""sv;
-        // Выводим атрибуты, унаследованные от PathProps
+        // Выводим атрибуты, унаследованные от PathProps 
         RenderAttrs(context.out);
         out << "/>"sv;
     }
 
-    // ---------- Polyline ----------------
+    // ---------- Polyline ---------------- 
 
     Polyline& Polyline::AddPoint(Point point) {
         points_.push_back(std::move(point));
@@ -95,12 +95,10 @@ namespace svg {
             }
         }
         out << "\"";
-        // Выводим атрибуты, унаследованные от PathProps
+        // Выводим атрибуты, унаследованные от PathProps 
         RenderAttrs(context.out);
         out << "/>"sv;
     }
-
-    // ---------- Text --------------------
 
     Text& Text::SetPosition(Point pos) {
         pos_ = pos;
@@ -135,7 +133,7 @@ namespace svg {
     void Text::RenderObject(const RenderContext& context) const {
         auto& out = context.out;
         out << "<text";
-        // Выводим атрибуты, унаследованные от PathProps
+        // Выводим атрибуты, унаследованные от PathProps 
         RenderAttrs(context.out);
         out << " x=\""sv << pos_.x << "\" y=\""sv << pos_.y << "\" "sv;
         out << "dx=\""sv << offset_.x << "\" dy=\""sv << offset_.y << "\" "sv;
@@ -144,8 +142,6 @@ namespace svg {
         if (!font_weight_.empty()) out << "font-weight=\""sv << font_weight_ << "\""sv;
         out << ">"sv << data_ << "</text>"sv;
     }
-
-    // ---------- Document ----------------
 
     void Document::AddPtr(std::unique_ptr<Object>&& obj) {
         objects_.emplace_back(std::move(obj));

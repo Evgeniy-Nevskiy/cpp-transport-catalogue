@@ -1,7 +1,6 @@
-#pragma once
-
-#include "json.h"
-#include <optional>
+#pragma once 
+#include "json.h" 
+#include <optional> 
 
 namespace json {
 
@@ -63,4 +62,4 @@ namespace json {
         Builder& builder_;
     };
 
-} // namespace json
+} // namespace json 

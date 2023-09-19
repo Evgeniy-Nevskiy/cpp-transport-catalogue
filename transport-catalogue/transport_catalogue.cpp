@@ -1,4 +1,4 @@
-#include "transport_catalogue.h"
+#include "transport_catalogue.h" 
 
 namespace transport {
 
@@ -79,10 +79,18 @@ namespace transport {
     }
 
     const std::map<std::string_view, const Bus*> TransportCatalogue::SortBuses() const {
-        
+
         std::map<std::string_view, const Bus*> result(busname_to_bus_.begin(), busname_to_bus_.end());
-        
+
         return result;
     }
 
-} // namespace transport
+    const std::map<std::string_view, const Stop*> TransportCatalogue::SortStops() const {
+        std::map<std::string_view, const Stop*> result;
+        for (const auto& stop : stopname_to_stop_) {
+            result.emplace(stop);
+        }
+        return result;
+    }
+
+} // namespace transport 

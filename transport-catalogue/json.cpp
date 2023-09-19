@@ -1,6 +1,5 @@
-#include "json.h"
-
-#include <iterator>
+#include "json.h" 
+#include <iterator> 
 
 namespace json {
 
@@ -136,7 +135,7 @@ namespace json {
         Node LoadNumber(std::istream& input) {
             std::string parsed_num;
 
-            
+
             auto read_char = [&parsed_num, &input] {
                 parsed_num += static_cast<char>(input.get());
                 if (!input) {
@@ -144,7 +143,7 @@ namespace json {
                 }
             };
 
-           
+
             auto read_digits = [&input, read_char] {
                 if (!std::isdigit(input.peek())) {
                     throw ParsingError("A digit is expected"s);
@@ -157,24 +156,24 @@ namespace json {
             if (input.peek() == '-') {
                 read_char();
             }
-            
+
             if (input.peek() == '0') {
                 read_char();
-              
+
             }
             else {
                 read_digits();
             }
 
             bool is_int = true;
-         
+
             if (input.peek() == '.') {
                 read_char();
                 read_digits();
                 is_int = false;
             }
 
-            
+
             if (int ch = input.peek(); ch == 'e' || ch == 'E') {
                 read_char();
                 if (ch = input.peek(); ch == '+' || ch == '-') {
@@ -186,12 +185,12 @@ namespace json {
 
             try {
                 if (is_int) {
-                    
+
                     try {
                         return std::stoi(parsed_num);
                     }
                     catch (...) {
-                       
+
                     }
                 }
                 return std::stod(parsed_num);
@@ -214,7 +213,7 @@ namespace json {
             case '"':
                 return LoadString(input);
             case 't':
-               
+
                 [[fallthrough]];
             case 'f':
                 input.putback(c);
@@ -262,7 +261,7 @@ namespace json {
                     out << "\\n"sv;
                     break;
                 case '"':
-                  
+
                     [[fallthrough]];
                 case '\\':
                     out.put('\\');
@@ -285,7 +284,7 @@ namespace json {
             ctx.out << "null"sv;
         }
 
-        
+
         template <>
         void PrintValue<bool>(const bool& value, const PrintContext& ctx) {
             ctx.out << (value ? "true"sv : "false"sv);
@@ -343,7 +342,7 @@ namespace json {
                 node.GetValue());
         }
 
-    }  // namespace
+    }  
 
     Document Load(std::istream& input) {
         return Document{ LoadNode(input) };
@@ -353,4 +352,4 @@ namespace json {
         PrintNode(doc.GetRoot(), PrintContext{ output });
     }
 
-}  // namespace json
+}  // namespace json 
