@@ -10,14 +10,14 @@
  *
  */
 
-#pragma once
+#pragma once 
 
-#include "geo.h"
+#include "geo.h" 
 
-#include <string>
-#include <vector>
-#include <set>
-#include <unordered_map>
+#include <string> 
+#include <vector> 
+#include <set> 
+#include <unordered_map> 
 
 namespace transport {
 
@@ -38,4 +38,4 @@ namespace transport {
         double curvature;
     };
 
-} // namespace transport
+} // namespace transport 
