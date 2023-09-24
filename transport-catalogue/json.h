@@ -1,15 +1,16 @@
-#pragma once 
+#pragma once
 
-#include <iostream> 
-#include <map> 
-#include <string> 
-#include <variant> 
-#include <vector> 
+#include <iostream>
+#include <map>
+#include <string>
+#include <variant>
+#include <vector>
+#include <utility>
 
 namespace json {
 
     class Node;
-    using Map = std::map<std::string, Node>;
+    using Dict = std::map<std::string, Node>;
     using Array = std::vector<Node>;
 
     class ParsingError : public std::runtime_error {
@@ -18,7 +19,7 @@ namespace json {
     };
 
     class Node final
-        : private std::variant<std::nullptr_t, Array, Map, bool, int, double, std::string> {
+        : private std::variant<std::nullptr_t, Array, Dict, bool, int, double, std::string> {
     public:
         using variant::variant;
         using Value = variant;
@@ -89,15 +90,15 @@ namespace json {
         }
 
         bool IsDict() const {
-            return std::holds_alternative<Map>(*this);
+            return std::holds_alternative<Dict>(*this);
         }
-        const Map& AsDict() const {
+        const Dict& AsDict() const {
             using namespace std::literals;
             if (!IsDict()) {
                 throw std::logic_error("Not a dict"s);
             }
 
-            return std::get<Map>(*this);
+            return std::get<Dict>(*this);
         }
 
         bool operator==(const Node& rhs) const {
@@ -105,10 +106,6 @@ namespace json {
         }
 
         const Value& GetValue() const {
-            return *this;
-        }
-
-        Value& GetValue() {
             return *this;
         }
     };

@@ -1,41 +1,32 @@
-/*
- * В этом файле вы можете разместить классы/структуры, которые являются частью предметной области (domain)
- * вашего приложения и не зависят от транспортного справочника. Например Автобусные маршруты и Остановки.
- *
- * Их можно было бы разместить и в transport_catalogue.h, однако вынесение их в отдельный
- * заголовочный файл может оказаться полезным, когда дело дойдёт до визуализации карты маршрутов:
- * визуализатор карты (map_renderer) можно будет сделать независящим от транспортного справочника.
- *
- * Если структура вашего приложения не позволяет так сделать, просто оставьте этот файл пустым.
- *
- */
+#pragma once
 
-#pragma once 
+#include "geo.h"
 
-#include "geo.h" 
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <string_view>
 
-#include <string> 
-#include <vector> 
-#include <set> 
-#include <unordered_map> 
-
-namespace transport {
+namespace domain {
 
     struct Stop {
+        Stop(const std::string& stop_name, const geo::Coordinates& crds);
+
+        int GetDistance(Stop* to);
+
         std::string stop_name;
         geo::Coordinates crds;
-        std::set<std::string> buses_on_this_stop;
+        std::unordered_map<std::string_view, int> stop_distances_;
     };
 
     struct Bus {
-        std::string bus_name;
-        std::vector<const Stop*> marshrut;
-        bool crug;
+        Bus(const std::string& bus_name, std::vector<Stop*> marshrut, bool crug);
 
-        size_t stops_count;
-        size_t unique_stops_count;
-        double marshrut_length;
-        double curvature;
+        std::string bus_name;
+        std::vector<Stop*> marshrut;
+        bool crug;
+        Stop* final_stop = nullptr;
+
     };
 
-} // namespace transport 
+} //namespace domain
